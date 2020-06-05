@@ -225,9 +225,12 @@ public class ArrayList<E> extends AbstractList<E>
     }
 
     private static int calculateCapacity(Object[] elementData, int minCapacity) {
+        // 如果 数组为空 计算 传入的参数和默认值作比较
         if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
+            //返回最大的数 默认大小 和 传入进来最小长度 做比
             return Math.max(DEFAULT_CAPACITY, minCapacity);
         }
+        // 如果不为空，返回传入的参数长度
         return minCapacity;
     }
 
@@ -236,8 +239,9 @@ public class ArrayList<E> extends AbstractList<E>
     }
 
     private void ensureExplicitCapacity(int minCapacity) {
+        // 扰动+1
         modCount++;
-
+        // 如果存放的数据位比当前数组的大小要大，就需要扩容
         // overflow-conscious code
         if (minCapacity - elementData.length > 0)
             grow(minCapacity);
@@ -259,13 +263,17 @@ public class ArrayList<E> extends AbstractList<E>
      */
     private void grow(int minCapacity) {
         // overflow-conscious code
+        // 将数组的长度赋值给临时变量
         int oldCapacity = elementData.length;
+        // 计算一个扩容后的长度 旧的长度+旧的长度右移一位 相当于 除以2
         int newCapacity = oldCapacity + (oldCapacity >> 1);
+        // 判断扩容后的大小是否期望小于期望大小 是的话，扩容大小等于期望大小
         if (newCapacity - minCapacity < 0)
             newCapacity = minCapacity;
-        if (newCapacity - MAX_ARRAY_SIZE > 0)
+        if (newCapacity - MAX_ARRAY_SIZE > 0)// 如果扩容后的大小大于数组最大大小，就扩容为jvm允许的最大值，MAX_ARRAY_SIZE 是integer最大值-8
             newCapacity = hugeCapacity(minCapacity);
         // minCapacity is usually close to size, so this is a win:
+        //把老数组的数据复制到新数组中
         elementData = Arrays.copyOf(elementData, newCapacity);
     }
 
@@ -463,7 +471,9 @@ public class ArrayList<E> extends AbstractList<E>
      * @return <tt>true</tt> (as specified by {@link Collection#add})
      */
     public boolean add(E e) {
+        // 校验数组长度+1后能后存下，不够就扩容
         ensureCapacityInternal(size + 1);  // Increments modCount!!
+        //将size的下标进行复制 再+1，等待下次进行赋值
         elementData[size++] = e;
         return true;
     }
